@@ -1,0 +1,72 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+scalar Upload
+scalar Timestamp
+
+type Category {
+  id: ID!
+  name: String!
+  apps: [App!]!
+}
+
+type App {
+  id: ID!
+  created: Timestamp!
+  title: String!
+  language: String!
+  language_count: String!
+  description: String!
+  size: Float!
+  award: String!
+  place: Int!
+  age: Int!
+  developer: String!
+  chart: String!
+  version: String!
+  compatibility: String!
+  downloadUrl: String!
+  category: Category!
+  # images: [AppImage!]!
+  avatar: AppAvatar!
+}
+
+# type AppImage{
+  # id: ID!
+# }
+
+input NewApp {
+  created: Timestamp!
+  title: String!
+  language: String!
+  language_count: String!
+  description: String!
+  size: Float!
+  award: String!
+  place: Int!
+  age: Int!
+  developer: String!
+  chart: String!
+  version: String!
+  compatibility: String!
+  downloadUrl: String!
+  category_id: ID!
+  # images: [AppImage!]!
+}
+
+type AppAvatar{
+  id: ID!
+  status: String!
+  url: String!
+}
+
+
+type Query {
+  apps: [App!]!
+  categories: [Category!]!
+}
+
+type Mutation {
+  uploadAppAvatar(file: Upload!): AppAvatar!
+  createApp(input: NewApp!): App!
+}
