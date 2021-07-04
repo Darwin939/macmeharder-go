@@ -411,7 +411,7 @@ type App {
 # }
 
 input NewApp {
-  created: Timestamp!
+  # created: Timestamp!
   title: String!
   language: String!
   language_count: String!
@@ -2658,14 +2658,6 @@ func (ec *executionContext) unmarshalInputNewApp(ctx context.Context, obj interf
 
 	for k, v := range asMap {
 		switch k {
-		case "created":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created"))
-			it.Created, err = ec.unmarshalNTimestamp2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "title":
 			var err error
 

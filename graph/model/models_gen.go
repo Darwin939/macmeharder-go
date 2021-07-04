@@ -35,7 +35,6 @@ type Category struct {
 }
 
 type NewApp struct {
-	Created       string  `json:"created"`
 	Title         string  `json:"title"`
 	Language      string  `json:"language"`
 	LanguageCount string  `json:"language_count"`
