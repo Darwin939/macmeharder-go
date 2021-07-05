@@ -2,18 +2,22 @@ package database
 
 import (
 	"database/sql"
-	_ "github.com/jackc/pgx"
+
+	"log"
+
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
 	_ "github.com/golang-migrate/migrate/source/file"
-	"log"
+	_ "github.com/lib/pq"
+	// _ "github.com/jackc/pgx"
 )
 
 var Db *sql.DB
 // postgresql://postgres:postgres@/postgres?sslmode=disable
 func InitDB() {
 	// Use root:dbpass@tcp(172.17.0.2)/hackernews, if you're using Windows.
-	db, err := sql.Open("postgres", "postgres:postgres@tcp(localhost)/postgres?sslmode=disable")
+	
+	db, err := sql.Open("postgres", "postgres://postgres@localhost/postgres?sslmode=disable")
 	if err != nil {
 		log.Panic(err)
 	}
