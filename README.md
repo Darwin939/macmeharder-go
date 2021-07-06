@@ -29,7 +29,7 @@ PostgresSQL used as the database
   }
 }</code>
 
-<H1 style="color:red">HOW TO RUN</H1>
+<H1 style="color:red">HOW *red* TO RUN</H1>
 <p>The first step is Running docker container with postgreSQL image with command below:</p>
 <code>docker compose up</code>
 <p>run server with command in root directory:</p>
