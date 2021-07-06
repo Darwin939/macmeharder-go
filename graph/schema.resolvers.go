@@ -7,7 +7,9 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-
+	"io"
+	"os"
+	"log"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Darwin939/macmeharder-go/graph/generated"
 	"github.com/Darwin939/macmeharder-go/graph/model"
@@ -15,7 +17,20 @@ import (
 )
 
 func (r *mutationResolver) UploadAppAvatar(ctx context.Context, file graphql.Upload) (*model.AppAvatar, error) {
-	panic(fmt.Errorf("not implemented"))
+	filepath := "./public/avatars/"+file.Filename
+	newfile, err := os.Create(filepath)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer newfile.Close()
+	_, err = io.Copy(newfile, file.File)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Success!")
+	
+	return &model.AppAvatar{},nil
+
 }
 
 func (r *mutationResolver) CreateApp(ctx context.Context, input model.NewApp) (*model.App, error) {
