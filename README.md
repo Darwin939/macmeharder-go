@@ -28,3 +28,9 @@ PostgresSQL used as the database
     url
   }
 }</code>
+
+<H1 style="color:red">HOW TO RUN</H1>
+<p>The first step is Running docker container with postgreSQL image with command below:</p>
+<code>docker compose up</code>
+<p>run server with command in root directory:</p>
+<code>go run server.go</code>
