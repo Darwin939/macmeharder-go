@@ -77,7 +77,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateApp       func(childComplexity int, input model.NewApp) int
-		UploadAppAvatar func(childComplexity int, file graphql.Upload) int
+		UploadAppAvatar func(childComplexity int, file graphql.Upload, input *model.NewImage) int
 	}
 
 	Query struct {
@@ -87,7 +87,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	UploadAppAvatar(ctx context.Context, file graphql.Upload) (*model.AppAvatar, error)
+	UploadAppAvatar(ctx context.Context, file graphql.Upload, input *model.NewImage) (*model.AppAvatar, error)
 	CreateApp(ctx context.Context, input model.NewApp) (*model.App, error)
 }
 type QueryResolver interface {
@@ -293,7 +293,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UploadAppAvatar(childComplexity, args["file"].(graphql.Upload)), true
+		return e.complexity.Mutation.UploadAppAvatar(childComplexity, args["file"].(graphql.Upload), args["input"].(*model.NewImage)), true
 
 	case "Query.apps":
 		if e.complexity.Query.Apps == nil {
@@ -441,8 +441,13 @@ type Query {
   categories: [Category!]!
 }
 
+
+input NewImage{
+  id:ID!
+}
+
 type Mutation {
-  uploadAppAvatar(file: Upload!): AppAvatar!
+  uploadAppAvatar(file: Upload!,input:NewImage): AppAvatar!
   createApp(input: NewApp!): App!
 }`, BuiltIn: false},
 }
@@ -479,6 +484,15 @@ func (ec *executionContext) field_Mutation_uploadAppAvatar_args(ctx context.Cont
 		}
 	}
 	args["file"] = arg0
+	var arg1 *model.NewImage
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalONewImage2ᚖgithubᚗcomᚋDarwin939ᚋmacmeharderᚑgoᚋgraphᚋmodelᚐNewImage(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -1365,7 +1379,7 @@ func (ec *executionContext) _Mutation_uploadAppAvatar(ctx context.Context, field
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UploadAppAvatar(rctx, args["file"].(graphql.Upload))
+		return ec.resolvers.Mutation().UploadAppAvatar(rctx, args["file"].(graphql.Upload), args["input"].(*model.NewImage))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2776,6 +2790,26 @@ func (ec *executionContext) unmarshalInputNewApp(ctx context.Context, obj interf
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNewImage(ctx context.Context, obj interface{}) (model.NewImage, error) {
+	var it model.NewImage
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -3777,6 +3811,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
+}
+
+func (ec *executionContext) unmarshalONewImage2ᚖgithubᚗcomᚋDarwin939ᚋmacmeharderᚑgoᚋgraphᚋmodelᚐNewImage(ctx context.Context, v interface{}) (*model.NewImage, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputNewImage(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

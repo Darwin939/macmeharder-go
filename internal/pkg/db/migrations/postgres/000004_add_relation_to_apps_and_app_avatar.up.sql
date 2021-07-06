@@ -1,0 +1,2 @@
+ALTER TABLE Apps
+    ADD avatar_id BIGINT REFERENCES AppAvatars(ID) UNIQUE;

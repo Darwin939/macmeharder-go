@@ -74,3 +74,13 @@ func GetAll() []App{
 	}
 	return apps
 }
+
+func (appAva AppAvatar) Save(id int) AppAvatar{
+	statement,err := database.Db.Prepare(`INSERT INTO "appavatars" (status,url) VALUES ($1,$2);
+										INSERT INTO "apps(avatar_id) values($3) WHERE ID=$4"`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer statement.Close()
+	_,err = statement.Exec()
+}

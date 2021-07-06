@@ -19,3 +19,12 @@ PostgresSQL used as the database
 
 
 <code>migrate create -ext sql -dir postgres -seq create_avatar_table</code>
+
+<h3>GraphQL mutations and queries</h3>
+
+<h4>Upload Avatar</h4>
+<code>mutation($file:Upload!) {
+  uploadAppAvatar(file:$file){
+    url
+  }
+}</code>

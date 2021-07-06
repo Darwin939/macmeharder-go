@@ -50,3 +50,7 @@ type NewApp struct {
 	DownloadURL   string  `json:"downloadUrl"`
 	CategoryID    string  `json:"category_id"`
 }
+
+type NewImage struct {
+	ID string `json:"id"`
+}

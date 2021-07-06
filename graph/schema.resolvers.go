@@ -6,31 +6,31 @@ package graph
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"io"
-	"os"
 	"log"
+	"os"
+	"strconv"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Darwin939/macmeharder-go/graph/generated"
 	"github.com/Darwin939/macmeharder-go/graph/model"
 	"github.com/Darwin939/macmeharder-go/internal/apps"
 )
 
-func (r *mutationResolver) UploadAppAvatar(ctx context.Context, file graphql.Upload) (*model.AppAvatar, error) {
-	filepath := "./public/avatars/"+file.Filename
+func (r *mutationResolver) UploadAppAvatar(ctx context.Context, file graphql.Upload, input *model.NewImage) (*model.AppAvatar, error) {
+	filepath := "./public/avatars/" + file.Filename
 	newfile, err := os.Create(filepath)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer newfile.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer newfile.Close()
 	_, err = io.Copy(newfile, file.File)
-    if err != nil {
-        log.Fatal(err)
-    }
-    fmt.Println("Success!")
-	
-	return &model.AppAvatar{},nil
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Success!")
 
+	return &model.AppAvatar{}, nil
 }
 
 func (r *mutationResolver) CreateApp(ctx context.Context, input model.NewApp) (*model.App, error) {
@@ -48,35 +48,35 @@ func (r *mutationResolver) CreateApp(ctx context.Context, input model.NewApp) (*
 		Compatibility: input.Compatibility,
 		DownloadURL:   input.DownloadURL,
 		Category:      category,
-		Age: input.Age,
+		Age:           input.Age,
 	}
 	app.Save()
-	
-	return &model.App{ Title: app.Title,
-					Language:      app.Language,
-					LanguageCount: app.LanguageCount,
-					Description:   app.Description,
-					Size:          app.Size,
-					Award:         app.Award,
-					Developer:     app.Developer,
-					Chart:         app.Chart,
-					Version:       app.Version,
-					Compatibility: app.Compatibility,
-					DownloadURL:   app.DownloadURL,
-					Age: app.Age,
-					}, nil
+
+	return &model.App{Title: app.Title,
+		Language:      app.Language,
+		LanguageCount: app.LanguageCount,
+		Description:   app.Description,
+		Size:          app.Size,
+		Award:         app.Award,
+		Developer:     app.Developer,
+		Chart:         app.Chart,
+		Version:       app.Version,
+		Compatibility: app.Compatibility,
+		DownloadURL:   app.DownloadURL,
+		Age:           app.Age,
+	}, nil
 }
 
 func (r *queryResolver) Apps(ctx context.Context) ([]*model.App, error) {
 	var (
 		resultApps []*model.App
-		dbApps []apps.App
+		dbApps     []apps.App
 	)
 	dbApps = apps.GetAll()
-	for _,app := range dbApps {
-		resultApps = append(resultApps,&model.App{
-			ID: app.ID,
-			Title: app.Title,
+	for _, app := range dbApps {
+		resultApps = append(resultApps, &model.App{
+			ID:            app.ID,
+			Title:         app.Title,
 			Language:      app.Language,
 			LanguageCount: app.LanguageCount,
 			Description:   app.Description,
@@ -87,9 +87,9 @@ func (r *queryResolver) Apps(ctx context.Context) ([]*model.App, error) {
 			Version:       app.Version,
 			Compatibility: app.Compatibility,
 			DownloadURL:   app.DownloadURL,
-			Age: app.Age,} )
+			Age:           app.Age})
 	}
-	return resultApps,nil
+	return resultApps, nil
 }
 
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
